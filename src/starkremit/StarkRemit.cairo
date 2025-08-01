@@ -56,7 +56,7 @@ pub mod StarkRemit {
     }
 
     #[derive(Copy, Drop, Serde, starknet::Store)]
-    struct MultiSigOperation {
+    pub struct MultiSigOperation {
         target_contract: ContractAddress,
         selector: felt252,
         calldata_len: u128,
@@ -65,7 +65,7 @@ pub mod StarkRemit {
     }
 
     #[derive(Copy, Drop, Serde, starknet::Store)]
-    struct UpgradeRecord {
+    pub struct UpgradeRecord {
         version: u64,
         class_hash: felt252,
         timestamp: u64,
@@ -73,7 +73,7 @@ pub mod StarkRemit {
     }
 
     #[derive(Copy, Drop, Serde, starknet::Store)]
-    struct AuditEntry {
+    pub struct AuditEntry {
         action: felt252,
         actor: ContractAddress,
         timestamp: u64,
@@ -81,7 +81,7 @@ pub mod StarkRemit {
     }
     #[allow(starknet::store_no_default_variant)]
     #[derive(Copy, Drop, Serde, starknet::Store)]
-    enum MultiSigStatus {
+    pub enum MultiSigStatus {
         Pending,
         Approved,
         Executed,
@@ -91,7 +91,7 @@ pub mod StarkRemit {
     // --- System Management Events ---
 
     #[derive(Drop, starknet::Event)]
-    struct AgentAuthorized {
+    pub struct AgentAuthorized {
         agent_address: ContractAddress,
         permission: felt252,
         authorized: bool,
@@ -99,7 +99,7 @@ pub mod StarkRemit {
     }
 
     #[derive(Drop, starknet::Event)]
-    struct AgentPermissionUpdated {
+    pub struct AgentPermissionUpdated {
         agent_address: ContractAddress,
         permission: felt252,
         authorized: bool,
@@ -107,14 +107,14 @@ pub mod StarkRemit {
     }
 
     #[derive(Drop, starknet::Event)]
-    struct AgentPermissionRevoked {
+    pub struct AgentPermissionRevoked {
         agent_address: ContractAddress,
         permission: felt252,
         revoked_by: ContractAddress,
     }
 
     #[derive(Drop, starknet::Event)]
-    struct ContractUpgradeInitiated {
+    pub struct ContractUpgradeInitiated {
         old_class_hash: felt252,
         new_class_hash: felt252,
         version: u64,
@@ -122,7 +122,7 @@ pub mod StarkRemit {
     }
 
     #[derive(Drop, starknet::Event)]
-    struct ContractUpgradeCompleted {
+    pub struct ContractUpgradeCompleted {
         old_class_hash: felt252,
         new_class_hash: felt252,
         version: u64,
@@ -130,7 +130,7 @@ pub mod StarkRemit {
     }
 
     #[derive(Drop, starknet::Event)]
-    struct ContractUpgradeRolledBack {
+    pub struct ContractUpgradeRolledBack {
         old_class_hash: felt252,
         new_class_hash: felt252,
         target_version: u64,
@@ -138,21 +138,20 @@ pub mod StarkRemit {
     }
 
     #[derive(Drop, starknet::Event)]
-    struct EmergencyPauseActivated {
+    pub struct EmergencyPauseActivated {
         function_selector: felt252,
         caller: ContractAddress,
         expires_at: u64,
     }
 
     #[derive(Drop, starknet::Event)]
-    struct EmergencyPauseDeactivated {
+    pub struct EmergencyPauseDeactivated {
         function_selector: felt252,
         caller: ContractAddress,
     }
-    // Removed #[event] from MultiSigOperationProposed, as only a struct named Event can be marked
-    // #[event]
+
     #[derive(Drop, starknet::Event)]
-    struct MultiSigOperationProposed {
+    pub struct MultiSigOperationProposed {
         op_id: felt252,
         target_contract: ContractAddress,
         selector: felt252,
@@ -160,26 +159,26 @@ pub mod StarkRemit {
     }
 
     #[derive(Drop, starknet::Event)]
-    struct MultiSigOperationApproved {
+    pub struct MultiSigOperationApproved {
         op_id: felt252,
         approver: ContractAddress,
         confirmations_count: u32,
     }
 
     #[derive(Drop, starknet::Event)]
-    struct MultiSigOperationExecuted {
+    pub struct MultiSigOperationExecuted {
         op_id: felt252,
         executor: ContractAddress,
     }
 
     #[derive(Drop, starknet::Event)]
-    struct MultiSigOperationRejected {
+    pub struct MultiSigOperationRejected {
         op_id: felt252,
         rejector: ContractAddress,
     }
 
     #[derive(Drop, starknet::Event)]
-    struct AuditTrailEntry {
+    pub struct AuditTrailEntry {
         action: felt252,
         actor: ContractAddress,
         timestamp: u64,
@@ -189,7 +188,7 @@ pub mod StarkRemit {
     // Event definitions
     #[event]
     #[derive(Drop, starknet::Event)]
-    enum Event {
+    pub enum Event {
         #[flat]
         Src5Event: SRC5Component::Event,
         #[flat]
