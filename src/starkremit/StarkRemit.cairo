@@ -34,13 +34,13 @@ const LOAN_TERM_DAYS: u64 = 30 * 24 * 60 * 60; // 30 days in seconds
 #[starknet::contract]
 pub mod StarkRemit {
     use super::*;
-    use starkremit_contract::starkremit::component::agent;
-    use starkremit_contract::starkremit::component::user_management;
-    use starkremit_contract::starkremit::component::contribution;
-    use starkremit_contract::starkremit::component::kyc;
-    use starkremit_contract::starkremit::component::loan;
-    use starkremit_contract::starkremit::component::savings_group;
-    use starkremit_contract::starkremit::component::token_management;
+    use starkremit_contract::component::agent;
+    use starkremit_contract::component::user_management;
+    use starkremit_contract::component::contribution;
+    use starkremit_contract::component::kyc;
+    use starkremit_contract::component::loan;
+    use starkremit_contract::component::savings_group;
+    use starkremit_contract::component::token_management;
 
     component!(path: AccessControlComponent, storage: accesscontrol, event: AccessControlEvent);
     component!(path: SRC5Component, storage: src5, event: Src5Event);
