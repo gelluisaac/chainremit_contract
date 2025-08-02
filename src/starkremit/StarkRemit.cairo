@@ -32,15 +32,57 @@ const LOAN_TERM_DAYS: u64 = 30 * 24 * 60 * 60; // 30 days in seconds
 #[starknet::contract]
 pub mod StarkRemit {
     use super::*;
+    use starkremit_contract::starkremit::component::agent;
+    use starkremit_contract::starkremit::component::user_management;
+    use starkremit_contract::starkremit::component::contribution;
+    use starkremit_contract::starkremit::component::kyc;
+    use starkremit_contract::starkremit::component::loan;
+    use starkremit_contract::starkremit::component::savings_group;
+    use starkremit_contract::starkremit::component::token_management;
 
     component!(path: AccessControlComponent, storage: accesscontrol, event: AccessControlEvent);
     component!(path: SRC5Component, storage: src5, event: Src5Event);
     component!(path: UpgradeableComponent, storage: upgradeable, event: UpgradeableEvent);
+    component!(path: agent, storage: agent_component, event: AgentEvent);
+    component!(path: user_management, storage: user_management_component, event: UserManagementEvent);
+    component!(path: contribution, storage: contribution_component, event: ContributionEvent);
+    component!(path: kyc, storage: kyc_component, event: KycEvent);
+    component!(path: loan, storage: loan_component, event: LoanEvent);
+    component!(path: savings_group, storage: savings_group_component, event: SavingsGroupEvent);
+    component!(path: token_management, storage: token_management_component, event: TokenManagementEvent);
 
     #[abi(embed_v0)]
     impl AccessControlImpl =
         AccessControlComponent::AccessControlImpl<ContractState>;
     impl AccessControlInternalImpl = AccessControlComponent::InternalImpl<ContractState>;
+
+    #[abi(embed_v0)]
+    impl AgentImpl = agent::AgentImpl<ContractState>;
+    impl AgentInternalImpl = agent::InternalImpl<ContractState>;
+
+    #[abi(embed_v0)]
+    impl UserManagementImpl = user_management::UserManagementImpl<ContractState>;
+    impl UserManagementInternalImpl = user_management::InternalImpl<ContractState>;
+
+    #[abi(embed_v0)]
+    impl ContributionImpl = contribution::ContributionImpl<ContractState>;
+    impl ContributionInternalImpl = contribution::InternalImpl<ContractState>;
+
+    #[abi(embed_v0)]
+    impl KycImpl = kyc::KycImpl<ContractState>;
+    impl KycInternalImpl = kyc::InternalImpl<ContractState>;
+
+    #[abi(embed_v0)]
+    impl LoanImpl = loan::LoanImpl<ContractState>;
+    impl LoanInternalImpl = loan::InternalImpl<ContractState>;
+
+    #[abi(embed_v0)]
+    impl SavingsGroupImpl = savings_group::SavingsGroupImpl<ContractState>;
+    impl SavingsGroupInternalImpl = savings_group::InternalImpl<ContractState>;
+
+    #[abi(embed_v0)]
+    impl TokenManagementImpl = token_management::TokenManagementImpl<ContractState>;
+    impl TokenManagementInternalImpl = token_management::InternalImpl<ContractState>;
 
     impl UpgradeableInternalImpl = UpgradeableComponent::InternalImpl<ContractState>;
 
@@ -195,7 +237,21 @@ pub mod StarkRemit {
         AccessControlEvent: AccessControlComponent::Event,
         #[flat]
         UpgradeableEvent: UpgradeableComponent::Event,
-        // System Management Events
+        #[flat]
+        AgentEvent: agent::Event,
+        #[flat]
+        UserManagementEvent: user_management::Event,
+        #[flat]
+        ContributionEvent: contribution::Event,
+        #[flat]
+        KycEvent: kyc::Event,
+        #[flat]
+        LoanEvent: loan::Event,
+        #[flat]
+        SavingsGroupEvent: savings_group::Event,
+        #[flat]
+        TokenManagementEvent: token_management::Event,
+                // System Management Events
         AgentAuthorized: AgentAuthorized,
         AgentPermissionUpdated: AgentPermissionUpdated,
         AgentPermissionRevoked: AgentPermissionRevoked,
@@ -263,6 +319,20 @@ pub mod StarkRemit {
         src5: SRC5Component::Storage,
         #[substorage(v0)]
         accesscontrol: AccessControlComponent::Storage,
+        #[substorage(v0)]
+        agent_component: agent::Storage,
+        #[substorage(v0)]
+        user_management_component: user_management::Storage,
+        #[substorage(v0)]
+        contribution_component: contribution::Storage,
+        #[substorage(v0)]
+        kyc_component: kyc::Storage,
+        #[substorage(v0)]
+        loan_component: loan::Storage,
+        #[substorage(v0)]
+        savings_group_component: savings_group::Storage,
+        #[substorage(v0)]
+        token_management_component: token_management::Storage,
         // System Management Storage
         agent_permissions: Map<(ContractAddress, felt252), bool>, // (agent, permission) -> granted
         paused_functions: Map<felt252, bool>, // function selector -> paused
