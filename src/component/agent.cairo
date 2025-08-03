@@ -17,7 +17,6 @@ pub mod agent_component {
     use starknet::{get_caller_address, get_block_timestamp, ContractAddress};
     use starkremit_contract::base::errors::TransferErrors;
     use starkremit_contract::base::types::{Agent, AgentStatus};
-    use core::num::traits::Zero;
     use starknet::storage::{StorageMapReadAccess, StorageMapWriteAccess,Map};
      
 
@@ -59,8 +58,8 @@ pub mod agent_component {
         updated_by: ContractAddress,
         timestamp: u64,
     }
-
-    #[embeddable_as(Agent)]
+    
+    #[embeddable_as(AgentComponent)]
     impl AgentImpl<
         TContractState, +HasComponent<TContractState>,
     > of IAgent<ComponentState<TContractState>> {
@@ -106,7 +105,7 @@ pub mod agent_component {
             let caller = get_caller_address();
             let current_time = get_block_timestamp();
             assert(self.agent_exists.read(agent_address), TransferErrors::AGENT_NOT_FOUND);
-            let mut agent = self.agents.read(agent_address);
+            let mut agent: Agent = self.agents.read(agent_address);
             let old_status = agent.status;
             agent.status = status;
             agent.last_active = current_time;
@@ -134,12 +133,12 @@ pub mod agent_component {
             let total_count = self.agent_region_count.read(region);
             let mut i = offset;
             let mut count = 0;
-            while i < total_count && count < limit {
-                let agent_address = self.agent_by_region.read((region, i));
-                let agent = self.agents.read(agent_address);
-                agents.append(agent);
-                count += 1;
-                i += 1;
+            while i != total_count && count != limit {
+            let agent_address = self.agent_by_region.read((region, i));
+            let agent = self.agents.read(agent_address);
+            agents.append(agent);
+            count += 1;
+            i += 1;
             }
             agents
         }

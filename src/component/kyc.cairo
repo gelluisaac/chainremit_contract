@@ -17,7 +17,7 @@ pub mod kyc_component {
     use starknet::{get_caller_address, get_block_timestamp, ContractAddress};
     use starkremit_contract::base::errors::{KYCErrors, RegistrationErrors};
     use starkremit_contract::base::types::{KycStatus, KycLevel, UserKycData, KYCLevel, RegistrationStatus};
-    use starknet::storage::{StorageMapReadAccess, StorageMapWriteAccess, Map, StoragePointerReadAccess, StoragePointerWriteAccess};
+    use starknet::storage::{StorageMapReadAccess, StorageMapWriteAccess, Map, StoragePointerWriteAccess};
 
     #[storage]
     pub struct Storage {
@@ -63,7 +63,7 @@ pub mod kyc_component {
         TContractState, +HasComponent<TContractState>,
     > of IKYC<ComponentState<TContractState>> {
         fn update_kyc_status(ref self: ComponentState<TContractState>, user: ContractAddress, status: KycStatus, level: KycLevel, verification_hash: felt252, expires_at: u64) -> bool {
-            let caller = get_caller_address();
+            let _caller = get_caller_address();
             // Only admin should be able to call this in a real contract
             let current_data = self.user_kyc_data.read(user);
             let old_status = current_data.status;
@@ -118,7 +118,7 @@ pub mod kyc_component {
             true
         }
         fn suspend_user_kyc(ref self: ComponentState<TContractState>, user: ContractAddress) -> bool {
-            let caller = get_caller_address();
+            let _caller = get_caller_address();
             let mut kyc_data = self.user_kyc_data.read(user);
             let old_status = kyc_data.status;
             kyc_data.status = KycStatus::Suspended;
@@ -133,7 +133,7 @@ pub mod kyc_component {
             true
         }
         fn reinstate_user_kyc(ref self: ComponentState<TContractState>, user: ContractAddress) -> bool {
-            let caller = get_caller_address();
+            let _caller = get_caller_address();
             let mut kyc_data = self.user_kyc_data.read(user);
             let old_status = kyc_data.status;
             assert(old_status == KycStatus::Suspended, KYCErrors::INVALID_KYC_STATUS);
@@ -165,3 +165,4 @@ pub mod kyc_component {
     }
 
 }
+

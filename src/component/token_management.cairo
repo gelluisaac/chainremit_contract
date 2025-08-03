@@ -104,7 +104,7 @@ pub mod token_management_component {
         fn transfer(ref self: ComponentState<TContractState>, to: ContractAddress, value: u256) -> bool {
             let caller = get_caller_address();
             let from_balance = self.balances.read(caller);
-            assert(from_balance >= value, MintBurnErrors::INSUFFICIENT_BALANCE);
+            assert(from_balance >= value, MintBurnErrors::INSUFFICIENT_BALANCE_BURN);
             self.balances.write(caller, from_balance - value);
             let to_balance = self.balances.read(to);
             self.balances.write(to, to_balance + value);
@@ -120,9 +120,9 @@ pub mod token_management_component {
         fn transfer_from(ref self: ComponentState<TContractState>, from: ContractAddress, to: ContractAddress, value: u256) -> bool {
             let caller = get_caller_address();
             let allowance = self.allowances.read((from, caller));
-            assert(allowance >= value, MintBurnErrors::INSUFFICIENT_ALLOWANCE);
+            assert(allowance >= value, MintBurnErrors::INSUFFICIENT_BALANCE_BURN);
             let from_balance = self.balances.read(from);
-            assert(from_balance >= value, MintBurnErrors::INSUFFICIENT_BALANCE);
+            assert(from_balance >= value, MintBurnErrors::INSUFFICIENT_BALANCE_BURN);
             self.allowances.write((from, caller), allowance - value);
             self.balances.write(from, from_balance - value);
             let to_balance = self.balances.read(to);
@@ -149,7 +149,7 @@ pub mod token_management_component {
             let caller = get_caller_address();
             assert(self.minters.read(caller), MintBurnErrors::NOT_MINTER);
             let from_balance = self.balances.read(from);
-            assert(from_balance >= amount, MintBurnErrors::INSUFFICIENT_BALANCE);
+            assert(from_balance >= amount, MintBurnErrors::INSUFFICIENT_BALANCE_BURN);
             self.balances.write(from, from_balance - amount);
             let supply = self.total_supply.read();
             self.total_supply.write(supply - amount);

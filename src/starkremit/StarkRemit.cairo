@@ -45,13 +45,13 @@ pub mod StarkRemit {
     component!(path: AccessControlComponent, storage: accesscontrol, event: AccessControlEvent);
     component!(path: SRC5Component, storage: src5, event: Src5Event);
     component!(path: UpgradeableComponent, storage: upgradeable, event: UpgradeableEvent);
-    component!(path: agent, storage: agent_component, event: AgentEvent);
-    component!(path: user_management, storage: user_management_component, event: UserManagementEvent);
-    component!(path: contribution, storage: contribution_component, event: ContributionEvent);
-    component!(path: kyc, storage: kyc_component, event: KycEvent);
-    component!(path: loan, storage: loan_component, event: LoanEvent);
-    component!(path: savings_group, storage: savings_group_component, event: SavingsGroupEvent);
-    component!(path: token_management, storage: token_management_component, event: TokenManagementEvent);
+    component!(path: agent, storage: agent_component, event: agent::Event);
+    component!(path: user_management, storage: user_management_component, event: user_management::Event);
+    component!(path: contribution, storage: contribution_component, event: contribution::Event);
+    component!(path: kyc, storage: kyc_component, event: kyc::Event);
+    component!(path: loan, storage: loan_component, event: loan::Event);
+    component!(path: savings_group, storage: savings_group_component, event: savings_group::Event);
+    component!(path: token_management, storage: token_management_component, event: token_management::Event);
 
     #[abi(embed_v0)]
     impl AccessControlImpl =
@@ -59,7 +59,7 @@ pub mod StarkRemit {
     impl AccessControlInternalImpl = AccessControlComponent::InternalImpl<ContractState>;
 
     #[abi(embed_v0)]
-    impl AgentImpl = agent::AgentImpl<ContractState>;
+    impl AgentComponentImpl = agent::AgentImpl<ContractState>;
     impl AgentInternalImpl = agent::InternalImpl<ContractState>;
 
     #[abi(embed_v0)]

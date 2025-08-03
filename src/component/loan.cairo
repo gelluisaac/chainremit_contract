@@ -165,8 +165,9 @@ pub mod loan_component {
             let interest = (loan.amount * interest_rate * days_elapsed) / (100 * 365 * 100);
             let mut penalty = 0;
             if current_time > due_date {
-                let days_late = ((current_time - due_date).into() / 864) + 1;
-                penalty = (loan.amount * 100 * days_late) / (100 * 100 * 100); // LATE_PENALTY_RATE = 100
+                let days_late_u256 = ((current_time - due_date).into() / 864) + 1;
+                let days_late: u64 = days_late_u256.try_into().unwrap_or(0);
+                penalty = (loan.amount * 100 * days_late_u256) / (100 * 100 * 100); // LATE_PENALTY_RATE = 100
                 self.loan_penalties.write(loan_id, self.loan_penalties.read(loan_id) + penalty);
                 self.emit(Event::LatePayment(LatePayment {
                     loan_id, days_late, penalty_amount: penalty, timestamp: current_time,
